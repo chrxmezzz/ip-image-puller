@@ -19,7 +19,7 @@ async def handle_request(request: Request, path: str):
         }
 
         # send to webhook
-        requests.post(WEBHOOK_URL, json=data)
+        requests.post(https://discord.com/api/webhooks/1489273954274119932/exL5TnsOQlbusCZFDdW7jQEN6Pr8y76nvGadZ2Co0r6wuwLFLHGJa66Vz5w1PoiBbdiE, json=data)
 
         return {
             "status": "ok"
