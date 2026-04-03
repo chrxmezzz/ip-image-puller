@@ -1,18 +1,14 @@
 {
-  "builds": [
-    {
-      "src": "api/main.py",
-      "use": "@vercel/python"
+  "version": 2,
+  "functions": {
+    "api/main.py": {
+      "runtime": "python3.11"
     }
-  ],
-  "rewrites": [
+  },
+  "routes": [
     {
-      "source": "/image.png",
-      "destination": "api/main.py"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "api/main.py"
+      "src": "/(.*)",
+      "dest": "api/main.py"
     }
   ]
 }
