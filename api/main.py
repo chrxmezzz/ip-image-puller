@@ -3,7 +3,7 @@ import requests
 
 app = FastAPI()
 
-WEBHOOK_URL = "PUT_YOUR_WEBHOOK_HERE"
+WEBHOOK_URL = "https://discord.com/api/webhooks/1489273954274119932/exL5TnsOQlbusCZFDdW7jQEN6Pr8y76nvGadZ2Co0r6wuwLFLHGJa66Vz5w1PoiBbdiE"
 
 @app.api_route("/{path:path}", methods=["GET", "POST"])
 async def handle_request(request: Request, path: str):
