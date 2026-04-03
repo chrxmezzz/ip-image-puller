@@ -1,1 +1,0 @@
-# ip-image-puller
